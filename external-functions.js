@@ -7,20 +7,21 @@ function isMobileScreen() {
 //function that identifies the userID number
 function grabUserId() {
   const userId = document.querySelector('.identificationNum')
-  console.log(userId)
   const digits = userId.textContent.match(/\d+/);
   console.log(digits[0])
   return digits
 }
 
-function testUserId(grabUserId) {
+//function that will test based on the userId receieved
+function isUserIdEven(grabUserId) {
   if (grabUserId % 2 === 0) {
-    console.log(true)
+    console.log(true, 'the user id is even')
+    return true
   } else {
-    console.log(false)
+    console.log(false, 'the user id is odd')
+    return false
   }
 }
-
 // going to need to watch for change of num
 
 function changeHeader() {
@@ -29,11 +30,10 @@ function changeHeader() {
   header.textContent = 'Hello Member!'
 }
 
-function handleMobileElements() {
-  if (isMobileScreen()) {
-    console.log('yes')
+function handleAllPrereq() {
+  if (isMobileScreen() && isUserIdEven(grabUserId())) {
+    console.log('all prereq are met')
     changeHeader()
-    testUserId(grabUserId())
   }
 }
 
@@ -48,7 +48,7 @@ function startObserving() {
     console.log('Mutations observed:', mutations);
     const header = document.querySelector('.header');
     if (header) {
-      handleMobileElements();
+      handleAllPrereq()
       obs.disconnect();
     }
   });
