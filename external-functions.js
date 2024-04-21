@@ -119,7 +119,6 @@ function alterBalanceDiv() {
   }
 }
 
-
 function getAccLocalStorage() {
   let userId = localStorage.getItem("acctInfo");
   let parseUser = JSON.parse(userId)
@@ -139,6 +138,25 @@ function updateIdTitle() {
   }
 }
 
+function updateMarketingWidth() {
+  const marketingContainer = document.querySelector('.marketing-offers');
+  const mostSavingContainer = document.getElementsByClassName('offerType-save-10%');
+  const leastSavingContainer = document.getElementsByClassName('offerType-save-5%');
+  if (isMobile && isUserIdEven()) {
+    marketingContainer.style.flexDirection = 'row';
+    mostSavingContainer[0].style.margin = '10px 5px';
+    mostSavingContainer[0].style.padding = '0px';
+    leastSavingContainer[0].style.margin = '10px 5px';
+    leastSavingContainer[0].style.padding = '0px';
+  } else {
+    marketingContainer.style.flexDirection = 'column';
+    mostSavingContainer[0].style.margin = '10px 20px';
+    mostSavingContainer[0].style.padding = '10px';
+    leastSavingContainer[0].style.margin = '10px 20px';
+    leastSavingContainer[0].style.padding = '10px';
+  }
+}
+
  function handleButtonClick () {
    updateIdTitle()
    grabUserId()
@@ -147,6 +165,7 @@ function updateIdTitle() {
    removeToggleLink();
    reverseBalanceContainer();
    alterBalanceDiv();
+   updateMarketingWidth();
 }
 
 function observeButtonClicks() {
@@ -197,9 +216,10 @@ window.onload = function () {
       updateIdTitle();
       updateHeader();
       removeToggleLink();
-      reverseBalanceContainer()
+      reverseBalanceContainer();
       alterBalanceDiv();
       updateButton();
+      updateMarketingWidth();
       // startUserIdObserving();
       document.body.style.display = "block";
     }, 100)
