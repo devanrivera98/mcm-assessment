@@ -77,6 +77,30 @@ const indexSix = makeDetailsUnclickable();
   }
 }
 
+function reverseBalanceContainer() {
+  const divs = document.querySelectorAll('div');
+  const fifteenthDiv = divs[14];
+  const children = Array.from(fifteenthDiv.childNodes);
+  const balanceIndex = children.findIndex(child => child.textContent === "Balance ");
+
+  if (isMobile && isUserIdEven()) {
+    if (balanceIndex !== -1) {
+      const balanceNode = children.splice(balanceIndex, 1)[0];
+      children.unshift(balanceNode);
+      fifteenthDiv.innerHTML = '';
+    }
+  } else {
+    if (balanceIndex === 0) {
+      children.reverse();
+    }
+  }
+
+  children.forEach(child => {
+    fifteenthDiv.appendChild(child);
+  });
+}
+
+
 function getAccLocalStorage() {
   let userId = localStorage.getItem("acctInfo");
   let parseUser = JSON.parse(userId)
@@ -101,13 +125,14 @@ function handleButtonClick () {
   grabUserId()
   updateHeader();
   updateButton();
+  reverseBalanceContainer();
   removeToggleLink();
 }
 
 function observeButtonClicks() {
   document.querySelectorAll('button').forEach(button => {
     button.addEventListener('click', () => {
-      setTimeout(handleButtonClick, 300);
+      setTimeout(handleButtonClick, 500);
     });
   });
 }
@@ -152,6 +177,7 @@ window.onload = function () {
       updateIdTitle();
       updateHeader();
       removeToggleLink();
+      reverseBalanceContainer()
       updateButton();
       // startUserIdObserving();
       document.body.style.display = "block";
