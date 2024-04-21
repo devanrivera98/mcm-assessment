@@ -8,9 +8,10 @@ const isMobile = isMobileScreen();
 //function that identifies the userID number
 function grabUserId() {
   const userId = document.querySelector('.identificationNum')
-  const digits = userId.textContent.match(/\d+/);
-  console.log('grabUserId',digits[0])
-  return digits[0]
+  // const digits = userId.textContent.match(/\d+/);
+  const digits = getAccLocalStorage();
+  console.log('grabUserId',digits)
+  return digits
 }
 
 //function that will test based on the userId receieved
@@ -31,13 +32,17 @@ function updateHeader() {
   } else {
     header.textContent = 'Welcome User!'
   }
+  localStorage.setItem('customerInfo', header.textContent);
 }
 
 function updateButton() {
   const button = document.querySelector('button')
-  if (isMobile) {
+  if (isMobile && isUserIdEven()) {
     button.textContent = 'Swap ID'
     button.className = 'orange'
+  } else {
+    button.textContent = 'Swap Accounts';
+    button.classList = ''
   }
 }
 
@@ -54,21 +59,23 @@ function findDivToRemove() {
   }
 }
 
-function removeToggleLink() {
-const targetDiv = findDivToRemove()
-  if (targetDiv) {
-    targetDiv.remove()
-  }
+function makeDetailsUnclickable() {
+  const divs = document.querySelectorAll('div');
+  const indexSix = divs[6];
+  return indexSix
 }
 
-// function that was intended to remove an issue with onclick after div was removed
-// function removeToggleContainerClick() {
-//   const divs = document.querySelectorAll('div');
-//   if (divs.length >= 10) {
-//     const tenthDiv = divs[9];
-//     tenthDiv.onclick = null;
-//   }
-// }
+function removeToggleLink() {
+const targetDiv = findDivToRemove()
+const indexSix = makeDetailsUnclickable();
+  if (targetDiv && isMobile && isUserIdEven()) {
+    targetDiv.classList.add('hidden');
+    indexSix.classList.add('unclickable')
+  } else {
+    targetDiv.classList.remove('hidden');
+    indexSix.classList.remove('unclickable');
+  }
+}
 
 function getAccLocalStorage() {
   let userId = localStorage.getItem("acctInfo");
@@ -81,41 +88,60 @@ function getAccLocalStorage() {
 function updateIdTitle() {
   const accountId = getAccLocalStorage()
   const userIdElement = document.querySelector('.identificationNum');
-  userIdElement.textContent = `User ID#: ${accountId}`
+  console.log('this is the local storage id',userIdElement.textContent)
+  if (isMobile && isUserIdEven()) {
+    userIdElement.textContent = `User ID#: ${accountId}`
+  } else {
+    userIdElement.textContent = `ID#: ${accountId}`
+  }
+}
+
+function handleButtonClick () {
+  updateIdTitle()
+  grabUserId()
+  updateHeader();
+  updateButton();
+  removeToggleLink();
 }
 
 function observeButtonClicks() {
   document.querySelectorAll('button').forEach(button => {
-    button.addEventListener('click', () => {updateIdTitle()})
-  })
-}
-
-//observing changes in userId
-function startUserIdObserving() {
-  const userIdElement = document.querySelector('.identificationNum');
-  if (!userIdElement) {
-    console.error('User ID element not found.');
-    return;
-  }
-
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach(mutation => {
-      console.log('User ID changed:', mutation);
-      if (isMobile) {
-        updateHeader();
-        const accInfo = getAccLocalStorage();
-      }
+    button.addEventListener('click', () => {
+      setTimeout(handleButtonClick, 300);
     });
   });
-
-  const observerOption = {
-    childList: true,
-    characterData: true,
-    subtree: true
-  }
-
-  observer.observe(userIdElement, observerOption);
 }
+
+
+// //observing changes in userId
+// function startUserIdObserving() {
+//   const userIdElement = document.querySelector('.identificationNum');
+//   const userMainButton = document.querySelector('button');
+//   if (!userIdElement) {
+//     console.error('User ID element not found.');
+//     return;
+//   }
+
+//   const observer = new MutationObserver((mutations) => {
+//     mutations.forEach(mutation => {
+//       console.log('User ID changed:', mutation);
+//       if (isMobile) {
+//         updateHeader();
+//         updateButton();
+//         updateIdTitle();
+//         removeToggleLink();
+//       }
+//     });
+//   });
+
+//   const observerOption = {
+//     childList: true,
+//     characterData: true,
+//     subtree: true
+//   }
+
+//   observer.observe(userIdElement, observerOption);
+// }
 
 
 observeButtonClicks()
@@ -123,18 +149,17 @@ observeButtonClicks()
 window.onload = function () {
   if (isMobile) {
     setTimeout(function () {
+      updateIdTitle();
       updateHeader();
       removeToggleLink();
       updateButton();
-      startUserIdObserving();
+      // startUserIdObserving();
       document.body.style.display = "block";
     }, 100)
   } else {
     document.body.style.display = "block";
   }
 };
-
-
 
 // window.addEventListener("load", function () {
 //   document.body.style.display = "block"
