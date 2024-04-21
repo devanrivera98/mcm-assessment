@@ -100,6 +100,25 @@ function reverseBalanceContainer() {
   });
 }
 
+function alterBalanceDiv() {
+  const divs = document.querySelectorAll('div');
+  const paras = document.querySelectorAll('p');
+  console.log('here is all p', paras);
+  const fifteenthDiv = divs[14];
+  const eightpar = paras[7];
+  console.log('aterbalance', isUserIdEven())
+  if (isMobile && isUserIdEven()) {
+    fifteenthDiv.style.flexDirection = 'row';
+    fifteenthDiv.style.flexWrap = 'wrap';
+    fifteenthDiv.style.alignContent = 'end'
+    eightpar.style.fontSize = '18px';
+  } else {
+    fifteenthDiv.style.flexDirection = 'column';
+    fifteenthDiv.style.flexWrap = 'nowrap';
+    fifteenthDiv.style.fontSize = '24px';
+  }
+}
+
 
 function getAccLocalStorage() {
   let userId = localStorage.getItem("acctInfo");
@@ -120,13 +139,14 @@ function updateIdTitle() {
   }
 }
 
-function handleButtonClick () {
-  updateIdTitle()
-  grabUserId()
-  updateHeader();
-  updateButton();
-  reverseBalanceContainer();
-  removeToggleLink();
+ function handleButtonClick () {
+   updateIdTitle()
+   grabUserId()
+   updateHeader();
+   updateButton();
+   removeToggleLink();
+   reverseBalanceContainer();
+   alterBalanceDiv();
 }
 
 function observeButtonClicks() {
@@ -178,6 +198,7 @@ window.onload = function () {
       updateHeader();
       removeToggleLink();
       reverseBalanceContainer()
+      alterBalanceDiv();
       updateButton();
       // startUserIdObserving();
       document.body.style.display = "block";
