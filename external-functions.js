@@ -3,6 +3,7 @@ function isMobileScreen() {
   const regex = /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
   return regex.test(navigator.userAgent)
 }
+const isMobile = isMobileScreen();
 
 //function that identifies the userID number
 function grabUserId() {
@@ -21,8 +22,8 @@ function isUserIdEven() {
   }
   return userId % 2 === 0;
 }
-// going to need to watch for change of num
 
+//function will update Header based on user ID
 function updateHeader() {
   const header = document.querySelector('.header');
   if(isUserIdEven()) {
@@ -32,52 +33,51 @@ function updateHeader() {
   }
 }
 
-function handleAllPrereq() {
-  if (isMobileScreen() && isUserIdEven()) {
-    console.log('All prereq are met')
-    updateHeader()
-  }
-}
-
 function observeButtonClicks() {
   document.querySelectorAll('button').forEach(button => {
-    button.addEventListener('click', handleAllPrereq)
+    button.addEventListener('click', () => {updateHeader()})
   })
 }
 
-function startObserving() {
-  const rootElement = document.getElementById('root');
-  if (!rootElement) {
-    console.error('Root element not found.');
+//observing changes in userId
+function startUserIdObserving() {
+  const userIdElement = document.querySelector('.identificationNum');
+  if (!userIdElement) {
+    console.error('User ID element not found.');
     return;
   }
 
   const observer = new MutationObserver((mutations) => {
-    console.log('Mutations observed:', mutations);
-    const header = document.querySelector('.header');
-    console.log('in the mutation',isUserIdEven())
-    if (header && isMobileScreen()) {
-      updateHeader()
-      // obs.disconnect();
-    }
+    mutations.forEach(mutation => {
+      console.log('User ID changed:', mutation);
+      if (isMobile) {
+        updateHeader();
+      }
+    });
   });
 
-  observer.observe(rootElement, {
+  const observerOption = {
     childList: true,
-    subtree: true,
     characterData: true,
-    characterDataOldValue: true,
-  });
+    subtree: true
+  }
+
+  observer.observe(userIdElement, observerOption);
 }
+
 
 observeButtonClicks()
 
-startObserving()
+window.onload = function () {
+  setTimeout(function () {
+    updateHeader();
+    startUserIdObserving();
+    document.body.style.display = "block";
+  }, 100)
+};
+
+
 
 // window.addEventListener("load", function () {
 //   document.body.style.display = "block"
 // });
-
-
-//Notes
-// going to need to observe when accounts swap if the id is even or odd
