@@ -9,32 +9,40 @@ function grabUserId() {
   const userId = document.querySelector('.identificationNum')
   const digits = userId.textContent.match(/\d+/);
   console.log(digits[0])
-  return digits
+  return digits[0]
 }
 
 //function that will test based on the userId receieved
-function isUserIdEven(grabUserId) {
-  if (grabUserId % 2 === 0) {
-    console.log(true, 'the user id is even')
-    return true
-  } else {
-    console.log(false, 'the user id is odd')
+function isUserIdEven() {
+  const userId = grabUserId();
+  if (userId === null) {
+    console.log('user Id not found')
     return false
   }
+  return userId % 2 === 0;
 }
 // going to need to watch for change of num
 
-function changeHeader() {
+function updateHeader() {
   const header = document.querySelector('.header');
-  console.log(header)
-  header.textContent = 'Hello Member!'
+  if(isUserIdEven()) {
+    header.textContent = 'Hello Member!'
+  } else {
+    header.textContent = 'Welcome User!'
+  }
 }
 
 function handleAllPrereq() {
-  if (isMobileScreen() && isUserIdEven(grabUserId())) {
-    console.log('all prereq are met')
-    changeHeader()
+  if (isMobileScreen() && isUserIdEven()) {
+    console.log('All prereq are met')
+    updateHeader()
   }
+}
+
+function observeButtonClicks() {
+  document.querySelectorAll('button').forEach(button => {
+    button.addEventListener('click', handleAllPrereq)
+  })
 }
 
 function startObserving() {
@@ -44,32 +52,31 @@ function startObserving() {
     return;
   }
 
-  const observer = new MutationObserver((mutations, obs) => {
+  const observer = new MutationObserver((mutations) => {
     console.log('Mutations observed:', mutations);
     const header = document.querySelector('.header');
-    if (header) {
-      handleAllPrereq()
-      obs.disconnect();
+    console.log('in the mutation',isUserIdEven())
+    if (header && isMobileScreen()) {
+      updateHeader()
+      // obs.disconnect();
     }
   });
 
   observer.observe(rootElement, {
     childList: true,
-    subtree: true
+    subtree: true,
+    characterData: true,
+    characterDataOldValue: true,
   });
 }
 
+observeButtonClicks()
+
 startObserving()
 
-window.addEventListener("load", function () {
-  document.body.style.display = "block"
-
-  // if (document.readyState === "complete") {
-  //   document.body.style.display = "block"
-  // } else {
-  //   document.body.style.display = "block"
-  // }
-});
+// window.addEventListener("load", function () {
+//   document.body.style.display = "block"
+// });
 
 
 //Notes
