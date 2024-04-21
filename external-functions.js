@@ -9,7 +9,7 @@ const isMobile = isMobileScreen();
 function grabUserId() {
   const userId = document.querySelector('.identificationNum')
   const digits = userId.textContent.match(/\d+/);
-  console.log(digits[0])
+  console.log('grabUserId',digits[0])
   return digits[0]
 }
 
@@ -26,16 +26,67 @@ function isUserIdEven() {
 //function will update Header based on user ID
 function updateHeader() {
   const header = document.querySelector('.header');
-  if(isUserIdEven()) {
+  if(isUserIdEven() && isMobile) {
     header.textContent = 'Hello Member!'
   } else {
     header.textContent = 'Welcome User!'
   }
 }
 
+function updateButton() {
+  const button = document.querySelector('button')
+  if (isMobile) {
+    button.textContent = 'Swap ID'
+    button.className = 'orange'
+  }
+}
+
+function findDivToRemove() {
+  const divs = document.querySelectorAll('div');
+  console.log(divs)
+  let targetDiv = null;
+  for (let i = 0; i < divs.length; i++) {
+    if (divs[i].textContent === "Hide Details") {
+      // console.log(divs[i])
+       targetDiv = divs[i];
+       return targetDiv
+    }
+  }
+}
+
+function removeToggleLink() {
+const targetDiv = findDivToRemove()
+  if (targetDiv) {
+    targetDiv.remove()
+  }
+}
+
+// function that was intended to remove an issue with onclick after div was removed
+// function removeToggleContainerClick() {
+//   const divs = document.querySelectorAll('div');
+//   if (divs.length >= 10) {
+//     const tenthDiv = divs[9];
+//     tenthDiv.onclick = null;
+//   }
+// }
+
+function getAccLocalStorage() {
+  let userId = localStorage.getItem("acctInfo");
+  let parseUser = JSON.parse(userId)
+  let accountId = parseUser[0].id
+  console.log(parseUser[0].id)
+  return accountId
+}
+
+function updateIdTitle() {
+  const accountId = getAccLocalStorage()
+  const userIdElement = document.querySelector('.identificationNum');
+  userIdElement.textContent = `User ID#: ${accountId}`
+}
+
 function observeButtonClicks() {
   document.querySelectorAll('button').forEach(button => {
-    button.addEventListener('click', () => {updateHeader()})
+    button.addEventListener('click', () => {updateIdTitle()})
   })
 }
 
@@ -52,6 +103,7 @@ function startUserIdObserving() {
       console.log('User ID changed:', mutation);
       if (isMobile) {
         updateHeader();
+        const accInfo = getAccLocalStorage();
       }
     });
   });
@@ -69,11 +121,17 @@ function startUserIdObserving() {
 observeButtonClicks()
 
 window.onload = function () {
-  setTimeout(function () {
-    updateHeader();
-    startUserIdObserving();
+  if (isMobile) {
+    setTimeout(function () {
+      updateHeader();
+      removeToggleLink();
+      updateButton();
+      startUserIdObserving();
+      document.body.style.display = "block";
+    }, 100)
+  } else {
     document.body.style.display = "block";
-  }, 100)
+  }
 };
 
 
