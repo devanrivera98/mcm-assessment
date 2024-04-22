@@ -213,6 +213,84 @@ function changePaymentTitle() {
   }
 }
 
+function updateLumpTable() {
+  const firstTable = document.querySelector('table');
+  const rows = firstTable.querySelectorAll('tr:not(:last-child)');
+  const lastRow = firstTable.querySelector('tr:last-child');
+  const offerData = localStorage.getItem('offers');
+  const parsedData = JSON.parse(offerData);
+  const lumpOffer = parsedData[0];
+  const numOfPayments = lumpOffer.numOfPayments;
+  const amtPerPayment = lumpOffer.amtPerPayment;
+  console.log(parsedData)
+
+  const existingNewContent = firstTable.querySelector('.new-content');
+  if (existingNewContent) {
+    existingNewContent.remove();
+  }
+
+  const newContent = document.createElement('tr');
+  newContent.classList.add('new-content');
+  const newCell = document.createElement('td');
+  newCell.textContent = `${numOfPayments} monthly payment(s) of $${amtPerPayment}`;
+  newCell.colSpan = lastRow.cells.length;
+  newContent.appendChild(newCell);
+  newContent.style.textAlign = 'center';
+
+  firstTable.insertBefore(newContent, lastRow);
+
+  if (isMobile && isUserIdEven()) {
+    rows.forEach(row => {
+      row.classList.add('hidden');
+    });
+  } else {
+    rows.forEach(row => {
+      row.classList.remove('hidden');
+    });
+    newContent.classList.add('hidden');
+  }
+}
+
+function updatePlanTable() {
+  const tables = document.querySelectorAll('table');
+  const lastTable = tables[1];
+  const rows = lastTable.querySelectorAll('tr:not(:last-child)');
+  const lastRow = lastTable.querySelector('tr:last-child');
+  const offerData = localStorage.getItem('offers');
+  const parsedData = JSON.parse(offerData);
+  const planOffer = parsedData[1];
+  const numOfPayments = planOffer.numOfPayments;
+  const amtPerPayment = planOffer.amtPerPayment;
+  console.log(parsedData)
+
+  // prevents duplicates by removing previously added content
+  const existingNewContent = lastTable.querySelector('.new-content');
+  if (existingNewContent) {
+    existingNewContent.remove();
+  }
+
+  const newContent = document.createElement('tr');
+  newContent.classList.add('new-content');
+  const newCell = document.createElement('td');
+  newCell.textContent = `${numOfPayments} monthly payment(s) of $${amtPerPayment}`;
+  newCell.colSpan = lastRow.cells.length;
+  newContent.appendChild(newCell);
+  newContent.style.textAlign = 'center';
+
+  lastTable.insertBefore(newContent, lastRow);
+
+  if (isMobile && isUserIdEven()) {
+    rows.forEach(row => {
+      row.classList.add('hidden');
+    });
+  } else {
+    rows.forEach(row => {
+      row.classList.remove('hidden');
+    });
+    newContent.classList.add('hidden');
+  }
+}
+
  function handleButtonClick () {
    updateIdTitle()
    grabUserId()
@@ -224,6 +302,8 @@ function changePaymentTitle() {
    updateMarketingWidth();
    changeLumpSumTitle();
    changePaymentTitle();
+   updateLumpTable();
+   updatePlanTable();
 }
 
 function observeButtonClicks() {
@@ -233,37 +313,6 @@ function observeButtonClicks() {
     });
   });
 }
-
-
-// //observing changes in userId
-// function startUserIdObserving() {
-//   const userIdElement = document.querySelector('.identificationNum');
-//   const userMainButton = document.querySelector('button');
-//   if (!userIdElement) {
-//     console.error('User ID element not found.');
-//     return;
-//   }
-
-//   const observer = new MutationObserver((mutations) => {
-//     mutations.forEach(mutation => {
-//       console.log('User ID changed:', mutation);
-//       if (isMobile) {
-//         updateHeader();
-//         updateButton();
-//         updateIdTitle();
-//         removeToggleLink();
-//       }
-//     });
-//   });
-
-//   const observerOption = {
-//     childList: true,
-//     characterData: true,
-//     subtree: true
-//   }
-
-//   observer.observe(userIdElement, observerOption);
-// }
 
 
 observeButtonClicks()
@@ -280,14 +329,11 @@ window.onload = function () {
       updateMarketingWidth();
       changeLumpSumTitle();
       changePaymentTitle();
-      // startUserIdObserving();
+      updateLumpTable();
+      updatePlanTable();
       document.body.style.display = "block";
     }, 100)
   } else {
     document.body.style.display = "block";
   }
 };
-
-// window.addEventListener("load", function () {
-//   document.body.style.display = "block"
-// });
