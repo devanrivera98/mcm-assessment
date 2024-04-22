@@ -2,4 +2,9 @@
 2. Where no actual class names were found I would attempt to loop through all elements until it matched the text. Othertimes I would extract the exact element needed.
 3. Made a conscious decision to make conditional checks such as isMobile and isUserIdEven happen inside each function needed instead of checking once all functions are ready
 4. Utilized defer on my javascript script file and used setTimeout because I wanted to confirm that the react script was ran first
-5. I made the decision to not make reusable functions for things like table one or table two since the requirements require one javascript file it helps for my personal readability to have different names. 
+5. I made the decision to not make reusable functions for things like table one or table two since the requirements require one javascript file it helps for my personal readability to have different names.
+6. Utilized the items stored in local storage such as UserId and most information regarding offers to update text or provide a new section of the table
+7. Organized all of my dynamic functions under handleButtonClick to make it easier when the swap id button is clicked
+8. Needed to set an interval for query selecting the main button because I ran into issues where sometimes the selector would return null and as a result the button would not work. I would keep the interval until the button actual appeared and then cleared it.
+9. Added a popstate so that whenever the user clicks back my functions will run again
+10. Targeted the anchor tag and made sure it matched the text so that when it is clicked it causes a reload of the previous page so that it is updated again will adjustments to the DOM.

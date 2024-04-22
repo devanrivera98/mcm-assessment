@@ -8,9 +8,7 @@ const isMobile = isMobileScreen();
 //function that identifies the userID number
 function grabUserId() {
   const userId = document.querySelector('.identificationNum')
-  // const digits = userId.textContent.match(/\d+/);
   const digits = getAccLocalStorage();
-  console.log('grabUserId',digits)
   return digits
 }
 
@@ -48,11 +46,9 @@ function updateButton() {
 
 function findDivToRemove() {
   const divs = document.querySelectorAll('div');
-  console.log(divs)
   let targetDiv = null;
   for (let i = 0; i < divs.length; i++) {
     if (divs[i].textContent === "Hide Details") {
-      // console.log(divs[i])
        targetDiv = divs[i];
        return targetDiv
     }
@@ -103,10 +99,8 @@ function reverseBalanceContainer() {
 function alterBalanceDiv() {
   const divs = document.querySelectorAll('div');
   const paras = document.querySelectorAll('p');
-  console.log('here is all paragraphs', paras);
   const fifteenthDiv = divs[14];
   const eightpar = paras[7];
-  console.log('aterbalance', isUserIdEven())
   if (isMobile && isUserIdEven()) {
     fifteenthDiv.style.flexDirection = 'row';
     fifteenthDiv.style.flexWrap = 'wrap';
@@ -123,14 +117,12 @@ function getAccLocalStorage() {
   let userId = localStorage.getItem("acctInfo");
   let parseUser = JSON.parse(userId)
   let accountId = parseUser[0].id
-  console.log(parseUser[0].id)
   return accountId
 }
 
 function updateIdTitle() {
   const accountId = getAccLocalStorage()
   const userIdElement = document.querySelector('.identificationNum');
-  console.log('this is the local storage id',userIdElement.textContent)
   if (isMobile && isUserIdEven()) {
     userIdElement.textContent = `User ID#: ${accountId}`
   } else {
@@ -163,7 +155,6 @@ function changeLumpSumTitle(){
   const lumpDiscount = paras[13];
   const lumpTitle = paras[8];
   const newDiscountPlace = paras[9];
-  console.log(lumpDiscount)
   if (isMobile && isUserIdEven()) {
     lumpTitle.textContent = 'Save';
     lumpTitle.style.fontWeight = 900;
@@ -191,7 +182,6 @@ function changePaymentTitle() {
   const paymentPlanDiscount = paras[25];
   const paymentPlanTitle = paras[20];
   const newDiscountPlace = paras[21];
-  console.log(paymentPlanDiscount)
   if (isMobile && isUserIdEven()) {
     paymentPlanTitle.textContent = 'Save';
     paymentPlanTitle.style.fontWeight = 900;
@@ -222,7 +212,6 @@ function updateLumpTable() {
   const lumpOffer = parsedData[0];
   const numOfPayments = lumpOffer.numOfPayments;
   const amtPerPayment = lumpOffer.amtPerPayment;
-  console.log(parsedData)
 
   const existingNewContent = firstTable.querySelector('.new-content');
   if (existingNewContent) {
@@ -261,7 +250,6 @@ function updatePlanTable() {
   const planOffer = parsedData[1];
   const numOfPayments = planOffer.numOfPayments;
   const amtPerPayment = planOffer.amtPerPayment;
-  console.log(parsedData)
 
   // prevents duplicates by removing previously added content
   const existingNewContent = lastTable.querySelector('.new-content');
@@ -321,7 +309,7 @@ function greenTableOneButton() {
 function observeButtonClicks() {
   const button = document.querySelector('button');
   button.addEventListener('click', () => {
-    setTimeout(handleButtonClick, 0);
+    setTimeout(handleButtonClick, 100);
   });
 }
 
@@ -375,14 +363,16 @@ window.addEventListener('popstate', function (event) {
       updatePlanTable();
       greenTableOneButton();
       document.body.style.display = "block";
-    }, 500)
+    }, 50)
   } else {
     document.body.style.display = "block";
   }
 })
 
-window.onpageshow = function (event) {
-  if (event.persisted) {
-    window.location.reload();
+document.addEventListener('click', function (event) {
+  if ((event.target.tagName === 'A') && (event.target.textContent = 'here')) {
+    document.body.style.display = "none";
+    window.location.reload()
+    }
   }
-};
+);
