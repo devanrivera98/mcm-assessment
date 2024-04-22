@@ -13,3 +13,7 @@ body {
 .unclickable {
   pointer-events: none;
 }
+
+.green {
+  background-color: green !important;
+}

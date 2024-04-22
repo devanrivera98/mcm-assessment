@@ -291,6 +291,17 @@ function updatePlanTable() {
   }
 }
 
+function greenTableOneButton() {
+  const buttons = document.querySelectorAll('button');
+  if (isMobile && isUserIdEven()) {
+    buttons[1].classList.add('green');
+    buttons[2].classList.add('green');
+  } else {
+    buttons[1].classList.remove('green');
+    buttons[2].classList.remove('green');
+  }
+}
+
  function handleButtonClick () {
    updateIdTitle()
    grabUserId()
@@ -304,18 +315,15 @@ function updatePlanTable() {
    changePaymentTitle();
    updateLumpTable();
    updatePlanTable();
+   greenTableOneButton();
 }
 
 function observeButtonClicks() {
-  document.querySelectorAll('button').forEach(button => {
-    button.addEventListener('click', () => {
-      setTimeout(handleButtonClick, 500);
-    });
+  const button = document.querySelector('button');
+  button.addEventListener('click', () => {
+    setTimeout(handleButtonClick, 0);
   });
 }
-
-
-observeButtonClicks()
 
 window.onload = function () {
   if (isMobile) {
@@ -331,9 +339,50 @@ window.onload = function () {
       changePaymentTitle();
       updateLumpTable();
       updatePlanTable();
+      greenTableOneButton();
       document.body.style.display = "block";
-    }, 100)
+    }, 500)
   } else {
     document.body.style.display = "block";
+  }
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+  function setupButtonListeners() {
+    const button = document.querySelector('button');
+    if (button) {
+      observeButtonClicks();
+      clearInterval(checkInterval);
+    }
+  }
+
+  let checkInterval = setInterval(setupButtonListeners, 100);
+});
+
+window.addEventListener('popstate', function (event) {
+  if (isMobile) {
+    setTimeout(function () {
+      updateIdTitle();
+      updateHeader();
+      removeToggleLink();
+      reverseBalanceContainer();
+      alterBalanceDiv();
+      updateButton();
+      updateMarketingWidth();
+      changeLumpSumTitle();
+      changePaymentTitle();
+      updateLumpTable();
+      updatePlanTable();
+      greenTableOneButton();
+      document.body.style.display = "block";
+    }, 500)
+  } else {
+    document.body.style.display = "block";
+  }
+})
+
+window.onpageshow = function (event) {
+  if (event.persisted) {
+    window.location.reload();
   }
 };
