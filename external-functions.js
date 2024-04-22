@@ -103,7 +103,7 @@ function reverseBalanceContainer() {
 function alterBalanceDiv() {
   const divs = document.querySelectorAll('div');
   const paras = document.querySelectorAll('p');
-  console.log('here is all p', paras);
+  console.log('here is all paragraphs', paras);
   const fifteenthDiv = divs[14];
   const eightpar = paras[7];
   console.log('aterbalance', isUserIdEven())
@@ -157,6 +157,62 @@ function updateMarketingWidth() {
   }
 }
 
+function changeLumpSumTitle(){
+  const paras = document.querySelectorAll('p');
+  const mostSavingContainer = document.getElementsByClassName('offerType-save-10%')[0];
+  const lumpDiscount = paras[13];
+  const lumpTitle = paras[8];
+  const newDiscountPlace = paras[9];
+  console.log(lumpDiscount)
+  if (isMobile && isUserIdEven()) {
+    lumpTitle.textContent = 'Save';
+    lumpTitle.style.fontWeight = 900;
+    lumpTitle.style.backgroundColor = 'blue';
+    lumpTitle.style.fontSize = '30px'
+    newDiscountPlace.textContent = '$' + lumpDiscount.textContent;
+    newDiscountPlace.style.fontWeight = 900;
+    newDiscountPlace.style.backgroundColor = 'blue';
+    newDiscountPlace.style.fontSize = '30px';
+  } else {
+    lumpTitle.textContent = 'LUMPSUM PLAN';
+    lumpTitle.style.fontWeight = 400;
+    lumpTitle.style.backgroundColor = '';
+    lumpTitle.style.fontSize = '16px'
+    newDiscountPlace.textContent = 'SAVE 10%';
+    newDiscountPlace.style.fontWeight = 400;
+    newDiscountPlace.style.backgroundColor = '';
+    newDiscountPlace.style.fontSize = '16px';
+  }
+}
+
+function changePaymentTitle() {
+  const paras = document.querySelectorAll('p');
+  const leastSavingContainer = document.getElementsByClassName('offerType-save-5%')[0];
+  const paymentPlanDiscount = paras[25];
+  const paymentPlanTitle = paras[20];
+  const newDiscountPlace = paras[21];
+  console.log(paymentPlanDiscount)
+  if (isMobile && isUserIdEven()) {
+    paymentPlanTitle.textContent = 'Save';
+    paymentPlanTitle.style.fontWeight = 900;
+    paymentPlanTitle.style.backgroundColor = 'blue';
+    paymentPlanTitle.style.fontSize = '30px'
+    newDiscountPlace.textContent = '$' + paymentPlanDiscount.textContent;
+    newDiscountPlace.style.fontWeight = 900;
+    newDiscountPlace.style.backgroundColor = 'blue';
+    newDiscountPlace.style.fontSize = '30px';
+  } else {
+    paymentPlanTitle.textContent = 'PAYMENT PLAN';
+    paymentPlanTitle.style.fontWeight = 400;
+    paymentPlanTitle.style.backgroundColor = '';
+    paymentPlanTitle.style.fontSize = '16px'
+    newDiscountPlace.textContent = 'SAVE 5%';
+    newDiscountPlace.style.fontWeight = 400;
+    newDiscountPlace.style.backgroundColor = '';
+    newDiscountPlace.style.fontSize = '16px';
+  }
+}
+
  function handleButtonClick () {
    updateIdTitle()
    grabUserId()
@@ -166,6 +222,8 @@ function updateMarketingWidth() {
    reverseBalanceContainer();
    alterBalanceDiv();
    updateMarketingWidth();
+   changeLumpSumTitle();
+   changePaymentTitle();
 }
 
 function observeButtonClicks() {
@@ -220,6 +278,8 @@ window.onload = function () {
       alterBalanceDiv();
       updateButton();
       updateMarketingWidth();
+      changeLumpSumTitle();
+      changePaymentTitle();
       // startUserIdObserving();
       document.body.style.display = "block";
     }, 100)

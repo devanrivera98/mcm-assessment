@@ -1,0 +1,4 @@
+1. Attempted to use MutationObservation but felt more constraining looking for changes to the root of the project causing performance issues
+2. Where no actual class names were found I would attempt to loop through all elements until it matched the text. Othertimes I would extract the exact element needed.
+3. Made a conscious decision to make conditional checks such as isMobile and isUserIdEven happen inside each function needed instead of checking once all functions are ready
+4. Utilized defer on my javascript script file and used setTimeout because I wanted to confirm that the react script was ran first
