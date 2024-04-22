@@ -1,0 +1,19 @@
+body {
+  display: none;
+}
+
+.orange {
+  background-color: rgb(208, 142, 19);
+}
+
+.hidden {
+  display: none;
+}
+
+.unclickable {
+  pointer-events: none;
+}
+
+.green {
+  background-color: green !important;
+}
